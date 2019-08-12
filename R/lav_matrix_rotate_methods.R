@@ -202,6 +202,35 @@ lav_matrix_rotate_geomin <- function(LAMBDA = NULL, geomin.epsilon = 0.01,
     out
 }
 
+# Variation of geomin that does not aim at simplifying the first factor
+# results in an exploratory bi-factor model
+# see Jennrich & Bentler (2011)
+lav_matrix_rotate_bigeomin <- function(LAMBDA = NULL, geomin.epsilon = 0.01,
+                                     ..., grad = FALSE) {
+  nCol <- ncol(LAMBDA)
+
+  L2 <- LAMBDA * LAMBDA
+  L2 <- L2 + geomin.epsilon
+  # exclude the first factor from the geomin-criterion
+  L2_tmp <- L2[, -1]
+  
+  if(geomin.epsilon < sqrt(.Machine$double.eps)) {
+    # Yates's original formula
+    tmp <- apply(L2_tmp, 1, prod)^(1/(nCol-1))
+  } else {
+    tmp <- exp( rowSums(log(L2_tmp)) / (nCol-1) )
+  }
+
+  out <- sum(tmp)
+
+  if(grad) {
+    attr(out, "grad") <- (2/nCol) * LAMBDA/L2 * tmp
+  }
+
+  out
+}
+
+
 # simple entropy
 # seems to only work for orthogonal rotation
 lav_matrix_rotate_entropy <- function(LAMBDA = NULL, ..., grad = FALSE) {
