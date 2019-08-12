@@ -71,7 +71,7 @@ lav_matrix_rotate <- function(A           = NULL,      # original matrix
         method <- "cf"
     }
     if(method %in% c("varimax", "quartimax", "orthomax", "cf", "oblimin",
-                     "quartimin", "geomin","bigeomin", "entropy", "mccammon", "infomax",
+                     "quartimin", "geomin", "bigeomin", "entropy", "mccammon", "infomax",
                      "tandem1", "tandem2",
                      "oblimax", "bentler", "simplimax", "target", "pst")) {
         method.fname <- paste("lav_matrix_rotate_", method, sep = "")
